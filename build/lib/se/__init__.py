@@ -29,7 +29,7 @@ BINARY_EXTENSIONS = [".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".png", ".epub", 
 SE_GENRES = ["Adventure", "Autobiography", "Biography", "Childrens", "Comedy", "Drama", "Fantasy", "Fiction", "Horror", "Memoir", "Mystery", "Nonfiction", "Philosophy", "Poetry", "Romance", "Satire", "Science Fiction", "Shorts", "Spirituality", "Tragedy", "Travel"]
 ARIA_ROLES = ["afterword", "appendix", "biblioentry", "bibliography", "chapter", "colophon", "conclusion", "dedication", "epigraph", "epilogue", "foreword", "introduction", "noteref", "part", "preface", "prologue", "subtitle", "toc"]
 IGNORED_CLASSES = ["name", "temperature", "state", "era", "compass", "acronym", "postal", "eoc", "initialism", "degree", "time", "compound", "timezone", "signature", "full-page"]
-SELECTORS_TO_SIMPLIFY = [":first-child", ":only-child", ":last-child"]
+SELECTORS_TO_SIMPLIFY = [":first-child", ":only-child"]
 MESSAGE_TYPE_WARNING = 1
 MESSAGE_TYPE_ERROR = 2
 COVER_TITLE_BOX_Y = 1620 # In px; note that in SVG, Y starts from the TOP of the image
@@ -99,9 +99,9 @@ class FirefoxRunningException(SeException):
 class RemoteCommandErrorException(SeException):
 	code = 10
 
-# def se():
-# 	print('SE Number of arguments:', len(sys.argv), 'arguments.')
-# 	print('Argument List:', str(sys.argv))
+def se():
+	print('SE Number of arguments:', len(sys.argv), 'arguments.')
+	print('Argument List:', str(sys.argv))
 
 def natural_sort(list_to_sort: list) -> list:
 	"""
