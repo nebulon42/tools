@@ -48,7 +48,7 @@ setup(
         "lxml==4.2.3",
         "psutil==5.5.0",
         "pyhyphen==3.0.1",
-        # "pyopenssl>=19.0.0",  # Required to allows the `requests` package to use https on Mac OSX
+        # "pyopenssl>=19.0.0",  # Required to allows the `requests` package to use https on Mac OSX, but segfaults when installed on Ubuntu
         "python-magic==0.4.13",
         "regex==2017.7.26",
         "requests>=2.20.0",

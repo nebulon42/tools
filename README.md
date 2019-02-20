@@ -11,9 +11,6 @@ A collection of tools Standard Ebooks uses to produce its ebooks, including basi
 # lxml requires the following packages for its pip build process: python3-dev libxml2-dev libxslt1-dev zlib1g-dev
 sudo apt install -y python3-pip python3-dev libxml2-dev libxslt1-dev zlib1g-dev libxml2-utils librsvg2-bin libssl-dev libimage-exiftool-perl imagemagick epubcheck default-jre inkscape calibre curl git
 
-# Clone the tools repo
-git clone https://github.com/standardebooks/tools.git
-
 # Install required fonts
 mkdir -p ~/.local/share/fonts/
 curl -s -o ~/.local/share/fonts/LeagueSpartan-Bold.otf "https://raw.githubusercontent.com/theleagueof/league-spartan/master/LeagueSpartan-Bold.otf"
@@ -23,8 +20,8 @@ curl -s -o ~/.local/share/fonts/OFLGoudyStM-Italic.otf "https://raw.githubuserco
 # Refresh the local font cache
 sudo fc-cache -fv
 
-# Install python dependencies
-pip3 install -r ./tools/requirements.txt
+# Install the toolset
+pip3 install se
 ```
 
 ## macOS users
@@ -42,9 +39,7 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 	```shell
 	# Install some pre-flight dependencies
 	brew install python epubcheck imagemagick libmagic librsvg exiftool git
-
-	# Clone the tools repo
-	git clone https://github.com/standardebooks/tools.git
+	pip3 install pyopenssl
 
 	# Install required applications
 	brew cask install java calibre xquartz inkscape
@@ -54,8 +49,8 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 	curl -s -o ~/Library/Fonts/OFLGoudyStM.otf "https://raw.githubusercontent.com/theleagueof/sorts-mill-goudy/master/OFLGoudyStM.otf"
 	curl -s -o ~/Library/Fonts/OFLGoudyStM-Italic.otf "https://raw.githubusercontent.com/theleagueof/sorts-mill-goudy/master/OFLGoudyStM-Italic.otf"
 
-	# Install python dependencies
-	pip3 install -r ./tools/requirements.txt
+	# Install the toolset
+	pip3 install se
 	```
 
 # Tool descriptions
