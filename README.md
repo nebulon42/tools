@@ -58,6 +58,10 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 	pip3 install standardebooks
 	```
 
+# Help wanted
+
+We need help creating bash completions for these tools. If you’re familiar with bash, please contact contact us to help!
+
 # Tool descriptions
 
 -	### `se british2american`
