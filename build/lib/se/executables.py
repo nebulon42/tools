@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""
+This file contains entry points for all of the various commands in the SE toolset.
+
+For example, `se build` and `se typogrify`.
+
+Most of the commands are entirely contained in this file. Some very long ones,
+like `build` and `create-draft`, are broken out to external modules for readability
+and maintainability.
+"""
 
 import sys
 import argparse
@@ -8,6 +17,7 @@ import subprocess
 from subprocess import call
 import tempfile
 import shutil
+from pkg_resources import resource_filename
 import regex
 import se
 import se.formatting
@@ -340,7 +350,7 @@ def extract_ebook() -> int:
 	import zipfile
 	from io import TextIOWrapper, BytesIO
 	import magic
-	from se.kindleunpack import kindleunpack
+	from se.vendor.kindleunpack import kindleunpack
 
 	parser = argparse.ArgumentParser(description="Extract an epub, mobi, or azw3 ebook into ./FILENAME.extracted/ or a target directory.")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
@@ -584,6 +594,287 @@ def make_url_safe() -> int:
 
 	return 0
 
+def modernize_spelling() -> int:
+	"""
+	Entry point for `se modernize-spelling`
+	"""
+
+	parser = argparse.ArgumentParser(description="Modernize spelling of some archaic words, and replace words that may be archaically compounded with a dash to a more modern spelling.  For example, replace `ash-tray` with `ashtray`.")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
+	parser.add_argument("-n", "--no-hyphens", dest="modernize_hyphenation", action="store_false", help="don’t modernize hyphenation")
+	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
+	args = parser.parse_args()
+
+	for filename in se.get_target_filenames(args.targets, (".xhtml")):
+		if args.verbose:
+			print("Processing {} ...".format(filename), end="", flush=True)
+
+		with open(filename, "r+", encoding="utf-8") as file:
+			xhtml = file.read()
+
+			try:
+				new_xhtml = se.spelling.modernize_spelling(xhtml)
+			except se.InvalidLanguageException as ex:
+				se.print_error("No valid xml:lang attribute in <html> root. Only en-US and en-GB are supported.{}".format(" File: " + filename if not args.verbose else ""))
+				return ex.code
+
+			if args.modernize_hyphenation:
+				new_xhtml = se.spelling.modernize_hyphenation(new_xhtml)
+
+			if new_xhtml != xhtml:
+				file.seek(0)
+				file.write(new_xhtml)
+				file.truncate()
+
+		if args.verbose:
+			print(" OK")
+
+	return 0
+
+def prepare_release() -> int:
+	"""
+	Entry point for `se prepare-release`
+	"""
+
+	parser = argparse.ArgumentParser(description="Calculate work word count, insert release date if not yet set, and update modified date and revision number.")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
+	parser.add_argument("-w", "--no-word-count", dest="word_count", action="store_false", help="don’t calculate word count")
+	parser.add_argument("-r", "--no-revision", dest="revision", action="store_false", help="don’t increment the revision number")
+	parser.add_argument("directories", metavar="DIRECTORY", nargs="+", help="a Standard Ebooks source directory")
+	args = parser.parse_args()
+
+	for directory in args.directories:
+		directory = os.path.abspath(directory)
+
+		if args.verbose:
+			print("Processing {} ...".format(directory))
+
+		try:
+			se_epub = SeEpub(directory)
+
+			if args.word_count:
+				if args.verbose:
+					print("\tUpdating word count and reading ease ...", end="", flush=True)
+
+				se_epub.update_word_count()
+				se_epub.update_flesch_reading_ease()
+
+				if args.verbose:
+					print(" OK")
+
+			if args.revision:
+				if args.verbose:
+					print("\tUpdating revision number ...", end="", flush=True)
+
+				se_epub.update_revision()
+
+				if args.verbose:
+					print(" OK")
+		except se.SeException as ex:
+			se.print_error(ex)
+			return ex.code
+
+	return 0
+
+def print_manifest_and_spine() -> int:
+	"""
+	Entry point for `se print-manifest-and-spine`
+	"""
+
+	parser = argparse.ArgumentParser(description="Print <manifest> and <spine> tags to standard output for the given Standard Ebooks source directory, for use in that directory’s content.opf.")
+	parser.add_argument("-m", "--manifest", action="store_false", help="only print the manifest")
+	parser.add_argument("-s", "--spine", action="store_false", help="only print the spine")
+	parser.add_argument("directory", metavar="DIRECTORY", help="a Standard Ebooks source directory")
+	args = parser.parse_args()
+
+	try:
+		se_epub = SeEpub(args.directory)
+	except se.SeException as ex:
+		se.print_error(ex)
+		return ex.code
+
+	if args.spine:
+		print(se_epub.generate_manifest())
+
+	if args.manifest:
+		print(se_epub.generate_spine())
+
+	return 0
+
+def reading_ease() -> int:
+	"""
+	Entry point for `se reading-ease`
+	"""
+
+	parser = argparse.ArgumentParser(description="Calculate the Flesch reading ease of a text composed of one or more XHTML files.")
+	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
+	args = parser.parse_args()
+
+	xhtml = ""
+
+	for filename in se.get_target_filenames(args.targets, (".xhtml")):
+		with open(filename, "r", encoding="utf-8") as file:
+			xhtml += " " + file.read()
+
+	print(se.formatting.get_flesch_reading_ease(xhtml))
+
+	return 0
+
+def recompose_epub() -> int:
+	"""
+	Entry point for `se recompose-epub`
+	"""
+
+	parser = argparse.ArgumentParser(description="Recompose a Standard Ebooks source directory into a single HTML5 file, and print to standard output.")
+	parser.add_argument("directory", metavar="DIRECTORY", help="a Standard Ebooks source directory")
+	args = parser.parse_args()
+
+	try:
+		se_epub = SeEpub(args.directory)
+		print(se_epub.recompose())
+	except se.SeException as ex:
+		se.print_error(ex)
+		return ex.code
+
+	return 0
+
+def reorder_endnotes() -> int:
+	"""
+	Entry point for `se reorder-endnotes`
+	"""
+
+	parser = argparse.ArgumentParser(description="Increment the specified endnote and all following endnotes by 1.")
+	group = parser.add_mutually_exclusive_group(required=True)
+	group.add_argument("--increment", "-i", action="store_true", help="increment the target endnote number and all following endnotes")
+	group.add_argument("--decrement", "-d", action="store_true", help="decrement the target endnote number and all following endnotes")
+	parser.add_argument("target_endnote_number", metavar="ENDNOTE-NUMBER", type=se.is_positive_integer, help="the endnote number to start reordering at")
+	parser.add_argument("directory", metavar="DIRECTORY", help="a Standard Ebooks source directory")
+	args = parser.parse_args()
+
+	try:
+		if args.increment:
+			step = 1
+		else:
+			step = -1
+
+		se_epub = SeEpub(args.directory)
+		se_epub.reorder_endnotes(args.target_endnote_number, step)
+
+	except se.SeException as ex:
+		se.print_error(ex)
+		return ex.code
+
+	return 0
+
+def roman2dec() -> int:
+	"""
+	Entry point for `se roman2dec`
+	"""
+
+	import roman
+
+	parser = argparse.ArgumentParser(description="Convert a Roman numeral to a decimal number.")
+	parser.add_argument("-n", "--no-newline", dest="newline", action="store_false", help="don’t end output with a newline")
+	parser.add_argument("numbers", metavar="NUMERAL", nargs="+", help="a Roman numeral")
+	args = parser.parse_args()
+
+	lines = []
+
+	if not sys.stdin.isatty():
+		for line in sys.stdin:
+			lines.append(line.rstrip("\n"))
+
+	for line in args.numbers:
+		lines.append(line)
+
+	for line in lines:
+		try:
+			if args.newline:
+				print(roman.fromRoman(line.upper()))
+			else:
+				print(roman.fromRoman(line.upper()), end="")
+		except roman.InvalidRomanNumeralError:
+			se.print_error("Not a Roman numeral: {}".format(line))
+			return se.InvalidInputException.code
+
+	return 0
+
+def semanticate() -> int:
+	"""
+	Entry point for `se semanticate`
+	"""
+
+	parser = argparse.ArgumentParser(description="Automatically add semantics to Standard Ebooks source directories.")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
+	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
+	args = parser.parse_args()
+
+	for filename in se.get_target_filenames(args.targets, (".xhtml")):
+		if args.verbose:
+			print("Processing {} ...".format(filename), end="", flush=True)
+
+		with open(filename, "r+", encoding="utf-8") as file:
+			xhtml = file.read()
+			processed_xhtml = se.formatting.semanticate(xhtml)
+
+			if processed_xhtml != xhtml:
+				file.seek(0)
+				file.write(processed_xhtml)
+				file.truncate()
+
+		if args.verbose:
+			print(" OK")
+
+	return 0
+
+def _split_file_output_file(chapter_number: int, header_xhtml: str, chapter_xhtml: str) -> None:
+	"""
+	Helper function for split_file() to write a file given the chapter number,
+	header XHTML, and chapter body XHTML.
+	"""
+
+	with open("chapter-" + str(chapter_number) + ".xhtml", "w", encoding="utf-8") as file:
+		file.write(header_xhtml.replace("NUMBER", str(chapter_number)) + "\n" + chapter_xhtml + "\n</section></body></html>")
+		file.truncate()
+
+def split_file() -> int:
+	"""
+	Entry point for `se split-file`
+	"""
+
+	parser = argparse.ArgumentParser(description="Split an XHTML file into many files at all instances of <!--se:split-->, and include a header template for each file.")
+	parser.add_argument("filename", metavar="FILE", help="an XHTML file")
+	args = parser.parse_args()
+
+	with open(args.filename, "r", encoding="utf-8") as file:
+		xhtml = se.strip_bom(file.read())
+
+	with open(resource_filename("se", os.path.join("data", "templates", "header.xhtml")), "r", encoding="utf-8") as file:
+		header_xhtml = file.read()
+
+	chapter_number = 1
+	chapter_xhtml = ""
+
+	# Remove leading split tags
+	xhtml = regex.sub(r"^\s*<\!--se:split-->", "", xhtml)
+
+	for line in xhtml.splitlines():
+		if "<!--se:split-->" in line:
+			prefix, suffix = line.split("<!--se:split-->")
+			chapter_xhtml = chapter_xhtml + prefix
+			_split_file_output_file(chapter_number, header_xhtml, chapter_xhtml)
+
+			chapter_number = chapter_number + 1
+			chapter_xhtml = suffix
+
+		else:
+			chapter_xhtml = chapter_xhtml + "\n" + line
+
+	if chapter_xhtml and not chapter_xhtml.isspace():
+		_split_file_output_file(chapter_number, header_xhtml, chapter_xhtml)
+
+	return 0
+
 def titlecase() -> int:
 	"""
 	Entry point for `se titlecase`
@@ -608,5 +899,96 @@ def titlecase() -> int:
 			print(se.formatting.titlecase(line))
 		else:
 			print(se.formatting.titlecase(line), end="")
+
+	return 0
+
+def typogrify() -> int:
+	"""
+	Entry point for `se typogrify`
+	"""
+
+	parser = argparse.ArgumentParser(description="Apply some scriptable typography rules from the Standard Ebooks typography manual to XHTML files.")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
+	parser.add_argument("-n", "--no-quotes", dest="quotes", action="store_false", help="don’t convert to smart quotes before doing other adjustments")
+	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
+	args = parser.parse_args()
+
+	if args.verbose and not args.quotes:
+		print("Skipping smart quotes.")
+
+	for filename in se.get_target_filenames(args.targets, (".xhtml")):
+		if filename.endswith("titlepage.xhtml"):
+			continue
+
+		if args.verbose:
+			print("Processing {} ...".format(filename), end="", flush=True)
+
+		with open(filename, "r+", encoding="utf-8") as file:
+			xhtml = file.read()
+			processed_xhtml = se.typography.typogrify(xhtml, args.quotes)
+
+			if processed_xhtml != xhtml:
+				file.seek(0)
+				file.write(processed_xhtml)
+				file.truncate()
+
+		if args.verbose:
+			print(" OK")
+
+	return 0
+
+def unicode_names() -> int:
+	"""
+	Entry point for `se unicode-names`
+	"""
+
+	import unicodedata
+
+	parser = argparse.ArgumentParser(description="Display Unicode code points, descriptions, and links to more details for each character in a string.  Useful for differentiating between different flavors of spaces, dashes, and invisible characters like word joiners.")
+	parser.add_argument("strings", metavar="STRING", nargs="*", help="a Unicode string")
+	args = parser.parse_args()
+
+	lines = []
+
+	if not sys.stdin.isatty():
+		for line in sys.stdin:
+			lines.append(line.rstrip("\n"))
+
+	for line in args.strings:
+		lines.append(line)
+
+	for line in lines:
+		for character in line:
+			print(character + "\tU+{:04X}".format(ord(character)) + "\t" + unicodedata.name(character) + "\t" + "http://unicode.org/cldr/utility/character.jsp?a={:04X}".format(ord(character)))
+
+	return 0
+
+def word_count() -> int:
+	"""
+	Entry point for `se word-count`
+	"""
+	parser = argparse.ArgumentParser(description="Count the number of words in an XHTML file and optionally categorize by length.  If multiple files are specified, show the total word count for all.")
+	parser.add_argument("-c", "--categorize", action="store_true", help="include length categorization in output")
+	parser.add_argument("-x", "--exclude-se-files", action="store_true", help="exclude some non-bodymatter files common to Standard Ebooks ebooks, like the ToC and colophon")
+	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
+	args = parser.parse_args()
+
+	total_word_count = 0
+
+	for filename in se.get_target_filenames(args.targets, (".xhtml"), args.exclude_se_files):
+		if args.exclude_se_files and filename.endswith("endnotes.xhtml"):
+			continue
+
+		with open(filename, "r", encoding="utf-8") as file:
+			total_word_count += se.formatting.get_word_count(file.read())
+
+	if args.categorize:
+		category = "se:short-story"
+		if total_word_count > se.NOVELLA_MIN_WORD_COUNT and total_word_count < se.NOVEL_MIN_WORD_COUNT:
+			category = "se:novella"
+		elif total_word_count > se.NOVEL_MIN_WORD_COUNT:
+			category = "se:novel"
+
+	print("{}{}".format(total_word_count, "\t" + category if args.categorize else ""))
 
 	return 0

@@ -1,15 +1,11 @@
 Metadata-Version: 2.1
 Name: se
 Version: 1.0.0
-Summary: A sample SE Python project
+Summary: The toolset used to produce Standard Ebooks epub ebooks.
 Home-page: https://standardebooks.org
 Author: Standard Ebooks
-Author-email: admin@standardebooks.org
 License: UNKNOWN
-Project-URL: Bug Reports, https://github.com/pypa/sampleproject/issues
-Project-URL: Funding, https://donate.pypi.org
-Project-URL: Say Thanks!, http://saythanks.io/to/example
-Project-URL: Source, https://github.com/pypa/sampleproject/
+Project-URL: Source, https://github.com/standardebooks/tools/
 Description: # About
         
         A collection of tools Standard Ebooks uses to produce its ebooks, including basic setup of ebooks, text processing, and build tools.
@@ -224,20 +220,13 @@ Description: # About
         
         `./src/epub/` contains the actual epub files.
         
-Keywords: sample setuptools development
+Keywords: ebooks epub
 Platform: UNKNOWN
-Classifier: Development Status :: 3 - Alpha
+Classifier: Development Status :: 4 - Alpha
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Software Development :: Build Tools
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Programming Language :: Python :: 2
-Classifier: Programming Language :: Python :: 2.7
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.4
-Classifier: Programming Language :: Python :: 3.5
 Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
 Requires-Python: >=3.6.7
 Description-Content-Type: text/markdown
-Provides-Extra: dev
-Provides-Extra: test

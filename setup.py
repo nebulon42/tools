@@ -42,7 +42,7 @@ setup(
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='A sample SE Python project',  # Optional
+    description='The toolset used to produce Standard Ebooks epub ebooks.',  # Optional
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -78,7 +78,7 @@ setup(
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='admin@standardebooks.org',  # Optional
+    #author_email='admin@standardebooks.org',  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -88,33 +88,28 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Alpha',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
 
         # Pick your license as you wish
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         # These classifiers are *not* checked by 'pip install'. See instead
         # 'python_requires' below.
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.6'
     ],
 
     # This field adds keywords for your project which will appear on the
     # project page. What does your project relate to?
     #
     # Note that this is a string of words separated by whitespace, not a list.
-    keywords='sample setuptools development',  # Optional
+    keywords='ebooks epub',  # Optional
 
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
@@ -125,7 +120,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),  # Required
+    packages=find_packages(),  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -140,20 +135,23 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    #install_requires=['peppercorn'],  # Optional
-
-    # List additional groups of dependencies here (e.g. development
-    # dependencies). Users will be able to install these using the "extras"
-    # syntax, for example:
-    #
-    #   $ pip install sampleproject[dev]
-    #
-    # Similar to `install_requires` above, these must be valid existing
-    # projects.
-    extras_require={  # Optional
-        'dev': ['check-manifest'],
-        'test': ['coverage'],
-    },
+    install_requires=["beautifulsoup4==4.6.0",
+                        "cssselect==1.0.1",
+                        "ftfy==5.3.0",
+                        "gitpython==2.1.5",
+                        "lxml==4.2.3",
+                        "psutil==5.5.0",
+                        "pyhyphen==3.0.1",
+                      #  "pyopenssl>=19.0.0",  # Required to allows the `requests` package to use https on Mac OSX
+                        "python-magic==0.4.13",
+                        "regex==2017.7.26",
+                        "requests>=2.20.0",
+                        "roman==2.0.0",
+                        "smartypants==2.0.0",
+                        "titlecase==0.11.0",
+                        "termcolor==1.1.0",
+                        "terminaltables==3.1.0"
+    ],  # Optional
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.
@@ -194,9 +192,6 @@ setup(
     # maintainers, and where to support the project financially. The key is
     # what's used to render the link text on PyPI.
     project_urls={  # Optional
-        'Bug Reports': 'https://github.com/pypa/sampleproject/issues',
-        'Funding': 'https://donate.pypi.org',
-        'Say Thanks!': 'http://saythanks.io/to/example',
-        'Source': 'https://github.com/pypa/sampleproject/',
+        'Source': 'https://github.com/standardebooks/tools/',
     },
 )

@@ -350,7 +350,7 @@ def extract_ebook() -> int:
 	import zipfile
 	from io import TextIOWrapper, BytesIO
 	import magic
-	from se.kindleunpack import kindleunpack
+	from se.vendor.kindleunpack import kindleunpack
 
 	parser = argparse.ArgumentParser(description="Extract an epub, mobi, or azw3 ebook into ./FILENAME.extracted/ or a target directory.")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
