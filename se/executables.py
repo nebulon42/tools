@@ -10,9 +10,11 @@ import tempfile
 import shutil
 import git
 import psutil
+import regex
 import se
 import se.formatting
 import se.typography
+import se.create_draft
 from se.se_epub import SeEpub
 
 
@@ -217,6 +219,28 @@ def compare_versions() -> int:
 						except Exception:
 							pass
 	return 0
+
+def create_draft() -> int:
+	parser = argparse.ArgumentParser(description="Create a skeleton of a new Standard Ebook in the current directory.")
+	parser.add_argument("-a", "--author", dest="author", required=True, help="the author of the ebook")
+	parser.add_argument("-t", "--title", dest="title", required=True, help="the title of the ebook")
+	parser.add_argument("-i", "--illustrator", dest="illustrator", help="the illustrator of the ebook")
+	parser.add_argument("-r", "--translator", dest="translator", help="the translator of the ebook")
+	parser.add_argument("-p", "--gutenberg-ebook-url", dest="pg_url", help="the URL of the Project Gutenberg ebook to download")
+	parser.add_argument("-s", "--create-se-repo", dest="create_se_repo", action="store_true", help="initialize a new repository on the Standard Ebook server; Standard Ebooks admin powers required")
+	parser.add_argument("-g", "--create-github-repo", dest="create_github_repo", action="store_true", help="initialize a new repository at the Standard Ebooks GitHub account; Standard Ebooks admin powers required; can only be used when --create-se-repo is specified")
+	parser.add_argument("-e", "--email", dest="email", help="use this email address as the main committer for the local Git repository")
+	args = parser.parse_args()
+
+	if args.create_github_repo and not args.create_se_repo:
+		se.print_error("--create-github-repo option specified, but --create-se-repo option not specified.")
+		return se.InvalidInputException.code
+
+	if args.pg_url and not regex.match("^https?://www.gutenberg.org/ebooks/[0-9]+$", args.pg_url):
+		se.print_error("Project Gutenberg URL must look like: https://www.gutenberg.org/ebooks/<EBOOK-ID>")
+		return se.InvalidInputException.code
+
+	return se.create_draft.create_draft(args)
 
 def titlecase() -> int:
 	parser = argparse.ArgumentParser(description="Convert a string to titlecase.")
