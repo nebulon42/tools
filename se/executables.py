@@ -49,9 +49,15 @@ def main() -> int:
 	Some more complex commands (like `create-draft` or `build` are broken out into their own files for
 	readability and maintainability.
 	"""
+
+	# If we're asked for the version, short circuit and exit
+	if sys.argv[1] == "-v" or sys.argv[1] == "--version":
+		return version()
+
 	commands = _get_commands()
 
 	parser = argparse.ArgumentParser(description="The entry point for the Standard Ebooks toolset.")
+	parser.add_argument("-v", "--version", action="store_true", help="print version number and exit")
 	parser.add_argument("command", metavar="COMMAND", choices=commands, help="one of: " + " ".join(commands))
 	parser.add_argument("arguments", metavar="ARGS", nargs="*", help="arguments for the subcommand")
 	args = parser.parse_args(sys.argv[1:2])
@@ -212,7 +218,7 @@ def compare_versions() -> int:
 	import git
 
 	parser = argparse.ArgumentParser(description="Use Firefox to render and compare XHTML files in an ebook repository. Run on a dirty repository to visually compare the repository’s dirty state with its clean state. If a file renders differently, copy screenshots of the new, original, and diff (if available) renderings into the current working directory. Diff renderings may not be available if the two renderings differ in dimensions. WARNING: DO NOT START FIREFOX WHILE THIS PROGRAM IS RUNNING!")
-	parser.add_argument("-i", "--include-common", dest="include_common_files", action="store_true", help="include commonly-excluded files like imprint, titlepage, and colophon")
+	parser.add_argument("-i", "--include-common", dest="include_common_files", action="store_true", help="include commonly-excluded SE files like imprint, titlepage, and colophon")
 	parser.add_argument("-n", "--no-images", dest="copy_images", action="store_false", help="don’t copy diff images to the current working directory in case of difference")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="a directory containing XHTML files")
@@ -363,7 +369,7 @@ def extract_ebook() -> int:
 	from se.vendor.kindleunpack import kindleunpack
 
 	parser = argparse.ArgumentParser(description="Extract an epub, mobi, or azw3 ebook into ./FILENAME.extracted/ or a target directory.")
-	parser.add_argument("-d", "--destination", type=str, help="a target directory to extract into")
+	parser.add_argument("-o", "--output-dir", type=str, help="a target directory to extract into")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an epub, mobi, or azw3 file")
 	args = parser.parse_args()
@@ -477,7 +483,7 @@ def hyphenate() -> int:
 
 	parser = argparse.ArgumentParser(description="Insert soft hyphens at syllable breaks in XHTML files.")
 	parser.add_argument("-i", "--ignore-h-tags", action="store_true", help="don’t add soft hyphens to text in <h1-6> tags")
-	parser.add_argument("-l", "--language", action="store", help="specify the language for the XHTML files; if unspecified, defaults to the \"xml:lang\" or \"lang\" attribute of the root <html> element")
+	parser.add_argument("-l", "--language", action="store", help="specify the language for the XHTML files; if unspecified, defaults to the `xml:lang` or `lang` attribute of the root <html> element")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
 	args = parser.parse_args()
@@ -665,9 +671,9 @@ def prepare_release() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Calculate work word count, insert release date if not yet set, and update modified date and revision number.")
+	parser.add_argument("-n", "--no-word-count", dest="word_count", action="store_false", help="don’t calculate word count")
 	parser.add_argument("-r", "--no-revision", dest="revision", action="store_false", help="don’t increment the revision number")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
-	parser.add_argument("-w", "--no-word-count", dest="word_count", action="store_false", help="don’t calculate word count")
 	parser.add_argument("directories", metavar="DIRECTORY", nargs="+", help="a Standard Ebooks source directory")
 	args = parser.parse_args()
 
@@ -871,7 +877,7 @@ def split_file() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Split an XHTML file into many files at all instances of <!--se:split-->, and include a header template for each file.")
-	parser.add_argument("filename", metavar="FILE", help="an XHTML file")
+	parser.add_argument("filename", metavar="FILE", help="an HTML/XHTML file")
 	args = parser.parse_args()
 
 	with open(args.filename, "r", encoding="utf-8") as file:
@@ -1006,7 +1012,7 @@ def word_count() -> int:
 
 	parser = argparse.ArgumentParser(description="Count the number of words in an XHTML file and optionally categorize by length.  If multiple files are specified, show the total word count for all.")
 	parser.add_argument("-c", "--categorize", action="store_true", help="include length categorization in output")
-	parser.add_argument("-x", "--exclude-se-files", action="store_true", help="exclude some non-bodymatter files common to Standard Ebooks ebooks, like the ToC and colophon")
+	parser.add_argument("-x", "--exclude-se-files", action="store_true", help="exclude some non-bodymatter files common to SE ebooks, like the ToC and colophon")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
 	args = parser.parse_args()
 
