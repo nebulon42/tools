@@ -74,8 +74,8 @@ def british2american() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Try to convert British quote style to American quote style. Quotes must already be typogrified using the `typogrify` tool. This script isn’t perfect; proofreading is required, especially near closing quotes near to em-dashes.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-f", "--force", action="store_true", help="force conversion of quote style")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
 	args = parser.parse_args()
 
@@ -120,13 +120,13 @@ def build() -> int:
 	from se.executables_build import build as se_build
 
 	parser = argparse.ArgumentParser(description="Build compatible .epub and pure .epub3 ebooks from a Standard Ebook source directory.  Output is placed in the current directory, or the target directory with --output-dir.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
-	parser.add_argument("-o", "--output-dir", dest="output_directory", metavar="DIRECTORY", type=str, help="a directory to place output files in; will be created if it doesn’t exist")
+	parser.add_argument("-b", "--kobo", dest="build_kobo", action="store_true", help="also build a .kepub.epub file for Kobo")
 	parser.add_argument("-c", "--check", action="store_true", help="use epubcheck to validate the compatible .epub file; if --kindle is also specified and epubcheck fails, don’t create a Kindle file")
 	parser.add_argument("-k", "--kindle", dest="build_kindle", action="store_true", help="also build an .azw3 file for Kindle")
-	parser.add_argument("-b", "--kobo", dest="build_kobo", action="store_true", help="also build a .kepub.epub file for Kobo")
-	parser.add_argument("-t", "--covers", dest="build_covers", action="store_true", help="output the cover and a cover thumbnail")
+	parser.add_argument("-o", "--output-dir", dest="output_directory", metavar="DIRECTORY", type=str, help="a directory to place output files in; will be created if it doesn’t exist")
 	parser.add_argument("-p", "--proof", action="store_true", help="insert additional CSS rules that are helpful for proofreading; output filenames will end in .proof")
+	parser.add_argument("-t", "--covers", dest="build_covers", action="store_true", help="output the cover and a cover thumbnail")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("source_directory", metavar="DIRECTORY", help="a Standard Ebooks source directory")
 	args = parser.parse_args()
 
@@ -178,8 +178,8 @@ def clean() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Prettify and canonicalize individual XHTML or SVG files, or all XHTML and SVG files in a source directory.  Note that this only prettifies the source code; it doesn’t perform typography changes.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-s", "--single-lines", action="store_true", help="remove hard line wrapping")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML or SVG file, or a directory containing XHTML or SVG files")
 	args = parser.parse_args()
 
@@ -212,9 +212,9 @@ def compare_versions() -> int:
 	import git
 
 	parser = argparse.ArgumentParser(description="Use Firefox to render and compare XHTML files in an ebook repository. Run on a dirty repository to visually compare the repository’s dirty state with its clean state. If a file renders differently, copy screenshots of the new, original, and diff (if available) renderings into the current working directory. Diff renderings may not be available if the two renderings differ in dimensions. WARNING: DO NOT START FIREFOX WHILE THIS PROGRAM IS RUNNING!")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
-	parser.add_argument("-n", "--no-images", dest="copy_images", action="store_false", help="don’t copy diff images to the current working directory in case of difference")
 	parser.add_argument("-i", "--include-common", dest="include_common_files", action="store_true", help="include commonly-excluded files like imprint, titlepage, and colophon")
+	parser.add_argument("-n", "--no-images", dest="copy_images", action="store_false", help="don’t copy diff images to the current working directory in case of difference")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="a directory containing XHTML files")
 	args = parser.parse_args()
 
@@ -304,13 +304,13 @@ def create_draft() -> int:
 
 	parser = argparse.ArgumentParser(description="Create a skeleton of a new Standard Ebook in the current directory.")
 	parser.add_argument("-a", "--author", dest="author", required=True, help="the author of the ebook")
-	parser.add_argument("-t", "--title", dest="title", required=True, help="the title of the ebook")
-	parser.add_argument("-i", "--illustrator", dest="illustrator", help="the illustrator of the ebook")
-	parser.add_argument("-r", "--translator", dest="translator", help="the translator of the ebook")
-	parser.add_argument("-p", "--gutenberg-ebook-url", dest="pg_url", help="the URL of the Project Gutenberg ebook to download")
-	parser.add_argument("-s", "--create-se-repo", dest="create_se_repo", action="store_true", help="initialize a new repository on the Standard Ebook server; Standard Ebooks admin powers required")
-	parser.add_argument("-g", "--create-github-repo", dest="create_github_repo", action="store_true", help="initialize a new repository at the Standard Ebooks GitHub account; Standard Ebooks admin powers required; can only be used when --create-se-repo is specified")
 	parser.add_argument("-e", "--email", dest="email", help="use this email address as the main committer for the local Git repository")
+	parser.add_argument("-g", "--create-github-repo", dest="create_github_repo", action="store_true", help="initialize a new repository at the Standard Ebooks GitHub account; Standard Ebooks admin powers required; can only be used when --create-se-repo is specified")
+	parser.add_argument("-i", "--illustrator", dest="illustrator", help="the illustrator of the ebook")
+	parser.add_argument("-p", "--gutenberg-ebook-url", dest="pg_url", help="the URL of the Project Gutenberg ebook to download")
+	parser.add_argument("-r", "--translator", dest="translator", help="the translator of the ebook")
+	parser.add_argument("-s", "--create-se-repo", dest="create_se_repo", action="store_true", help="initialize a new repository on the Standard Ebook server; Standard Ebooks admin powers required")
+	parser.add_argument("-t", "--title", dest="title", required=True, help="the title of the ebook")
 	args = parser.parse_args()
 
 	if args.create_github_repo and not args.create_se_repo:
@@ -363,8 +363,8 @@ def extract_ebook() -> int:
 	from se.vendor.kindleunpack import kindleunpack
 
 	parser = argparse.ArgumentParser(description="Extract an epub, mobi, or azw3 ebook into ./FILENAME.extracted/ or a target directory.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-d", "--destination", type=str, help="a target directory to extract into")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an epub, mobi, or azw3 file")
 	args = parser.parse_args()
 
@@ -411,6 +411,8 @@ def find_mismatched_diacritics() -> int:
 	"""
 	Entry point for `se find-mismatched-diacritics`
 	"""
+
+	import unicodedata
 
 	parser = argparse.ArgumentParser(description="Find words with mismatched diacritics in a set of XHTML files.  For example, `cafe` in one file and `café` in another.")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
@@ -474,9 +476,9 @@ def hyphenate() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Insert soft hyphens at syllable breaks in XHTML files.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
-	parser.add_argument("-l", "--language", action="store", help="specify the language for the XHTML files; if unspecified, defaults to the \"xml:lang\" or \"lang\" attribute of the root <html> element")
 	parser.add_argument("-i", "--ignore-h-tags", action="store_true", help="don’t add soft hyphens to text in <h1-6> tags")
+	parser.add_argument("-l", "--language", action="store", help="specify the language for the XHTML files; if unspecified, defaults to the \"xml:lang\" or \"lang\" attribute of the root <html> element")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
 	args = parser.parse_args()
 
@@ -524,8 +526,8 @@ def lint() -> int:
 	from termcolor import colored
 
 	parser = argparse.ArgumentParser(description="Check for various Standard Ebooks style errors.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-p", "--plain", action="store_true", help="print plain output")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("directories", metavar="DIRECTORY", nargs="+", help="a Standard Ebooks source directory")
 	args = parser.parse_args()
 
@@ -626,8 +628,8 @@ def modernize_spelling() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Modernize spelling of some archaic words, and replace words that may be archaically compounded with a dash to a more modern spelling.  For example, replace `ash-tray` with `ashtray`.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-n", "--no-hyphens", dest="modernize_hyphenation", action="store_false", help="don’t modernize hyphenation")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
 	args = parser.parse_args()
 
@@ -663,9 +665,9 @@ def prepare_release() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Calculate work word count, insert release date if not yet set, and update modified date and revision number.")
+	parser.add_argument("-r", "--no-revision", dest="revision", action="store_false", help="don’t increment the revision number")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-w", "--no-word-count", dest="word_count", action="store_false", help="don’t calculate word count")
-	parser.add_argument("-r", "--no-revision", dest="revision", action="store_false", help="don’t increment the revision number")
 	parser.add_argument("directories", metavar="DIRECTORY", nargs="+", help="a Standard Ebooks source directory")
 	args = parser.parse_args()
 
@@ -771,8 +773,8 @@ def reorder_endnotes() -> int:
 
 	parser = argparse.ArgumentParser(description="Increment the specified endnote and all following endnotes by 1.")
 	group = parser.add_mutually_exclusive_group(required=True)
-	group.add_argument("--increment", "-i", action="store_true", help="increment the target endnote number and all following endnotes")
-	group.add_argument("--decrement", "-d", action="store_true", help="decrement the target endnote number and all following endnotes")
+	group.add_argument("-d", "--decrement", action="store_true", help="decrement the target endnote number and all following endnotes")
+	group.add_argument("-i", "--increment", action="store_true", help="increment the target endnote number and all following endnotes")
 	parser.add_argument("target_endnote_number", metavar="ENDNOTE-NUMBER", type=se.is_positive_integer, help="the endnote number to start reordering at")
 	parser.add_argument("directory", metavar="DIRECTORY", help="a Standard Ebooks source directory")
 	args = parser.parse_args()
@@ -934,8 +936,8 @@ def typogrify() -> int:
 	"""
 
 	parser = argparse.ArgumentParser(description="Apply some scriptable typography rules from the Standard Ebooks typography manual to XHTML files.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-n", "--no-quotes", dest="quotes", action="store_false", help="don’t convert to smart quotes before doing other adjustments")
+	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("targets", metavar="TARGET", nargs="+", help="an XHTML file, or a directory containing XHTML files")
 	args = parser.parse_args()
 
@@ -989,10 +991,19 @@ def unicode_names() -> int:
 
 	return 0
 
+def version() -> int:
+	"""
+	Entry point for `se version`
+	"""
+
+	print(se.VERSION)
+	return 0
+
 def word_count() -> int:
 	"""
 	Entry point for `se word-count`
 	"""
+
 	parser = argparse.ArgumentParser(description="Count the number of words in an XHTML file and optionally categorize by length.  If multiple files are specified, show the total word count for all.")
 	parser.add_argument("-c", "--categorize", action="store_true", help="include length categorization in output")
 	parser.add_argument("-x", "--exclude-se-files", action="store_true", help="exclude some non-bodymatter files common to Standard Ebooks ebooks, like the ToC and colophon")

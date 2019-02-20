@@ -36,56 +36,49 @@ case $state in
 			"titlecase[Convert a string to titlecase]" \
 			"typogrify[Apply some scriptable typography rules from the Standard Ebooks typography manual to a Standard Ebook source directory]" \
 			"unicode-names[Display Unicode code points, descriptions, and links to more details for each character in a string]" \
+			"version[Print the version number and exit]" \
 			"word-count[Count the number of words in an HTML file and optionally categorize by length]"
 		ret=0
 		;;
 	args)
 		case $line[1] in
-			help)
-				_values 'commands' 'install' 'update' 'package' 'exec' 'config' 'check' 'list' 'show' 'console' 'open' 'viz' 'init' 'gem' 'help' 'platform' 'outdated' && ret=0
-				;;
-			install)
-				_policies=('HighSecurity' 'MediumSecurity' 'LowSecurity' 'AlmostNoSecurity' 'NoSecurity')
+			british2american)
 				_arguments \
-					'(--no-color)--no-color[disable colorization in output]' \
-					'(--local)--local[do not attempt to connect to rubygems.org]' \
-					'(--quiet)--quiet[only output warnings and errors]' \
-					'(--gemfile)--gemfile=-[use the specified gemfile instead of Gemfile]:gemfile' \
-					'(--system)--system[install to the system location]' \
-					'(--deployment)--deployment[install using defaults tuned for deployment environments]' \
-					'(--frozen)--frozen[do not allow the Gemfile.lock to be updated after this install]' \
-					'(--path)--path=-[specify a different path than the system default]:path:_files' \
-					'(--binstubs)--binstubs=-[generate bin stubs for sed gems to ./bin]:directory:_files' \
-					'(--without)--without=-[exclude gems that are part of the specified named group]:groups' \
-					'(--with)--with=-[include gems that are part of the specified named group]:groups' \
-					'(--clean)--clean[remove any gems not present in the current Gemfile]' \
-					'(--full-index)--full-index[download and cache the index file of all gems]' \
-					'(--jobs)--jobs=-[install gems parallely]:number' \
-					'(--force)--force[force download every gem]' \
-					'(--no-cache)--no-cache[do not update the cache in vendor/cache with newly installed gems]' \
-					'(--no-prune)--no-prune[do not remove stale gem from cache after installation]' \
-					'(--retry)--retry=-[number of times to retry failed network or git requests]:number' \
-					'(--sheband)--shebang=-[specify ruby executable to execute scripts]:ruby' \
-					'(--standalone)--standalone=-[create standalone ses]:groups' \
-					"(--trust-policy)--trust-policy=-[apply the Rubygems security policy]:arg:($_policies)"
+					'(-f --force)'{-f,--force}'[force conversion of quote style]' \
+					'(-v --verbose)'{-v,--verbose}'[increase output verbosity]'
 				ret=0
 				;;
-			exec)
-				_normal && ret=0
+			build)
+				_arguments \
+					'(-b --kobo)'{-b,--kobo}'[also build a .kepub.epub file for Kobo]' \
+					'(-c --check)'{-c,--check}'[use epubcheck to validate the compatible .epub file; if --kindle is also specified and epubcheck fails, don’t create a Kindle file]' \
+					'(-k --kindle)'{-k,--kindle}'[also build an .azw3 file for Kindle]' \
+					'(-o --output-dir)'{-o,--output-dir}'=[a directory to place output files in; will be created if it doesn’t exist]: :_directories' \
+					'(-p --proof)'{-p,--proof}'[insert additional CSS rules that are helpful for proofreading; output filenames will end in .proof]' \
+					'(-t --covers)'{-t,--covers}'[output the cover and a cover thumbnail]' \
+					'(-v --verbose)'{-v,--verbose}'[increase output verbosity]' \
+					'*: :_directories'
+				ret=0
 				;;
-			(open|show)
-				_gems=( $(se show 2> /dev/null | sed -e '/^  \*/!d; s/^  \* \([^ ]*\) .*/\1/') )
-				if [[ $_gems != "" ]]; then
-					_values 'gems' $_gems && ret=0
-				fi
+			build-images)
+				_arguments \
+					'(-v --verbose)'{-v,--verbose}'[increase output verbosity]' \
+					'*: :_directories'
+				ret=0
 				;;
-			*)
-				_opts=(  $(se help $line[1] | sed -e '/^  \[-/!d; s/^  \[\(-[^=]*\)=.*/\1/') )
-				_opts+=( $(se help $line[1] | sed -e '/^  -/!d; s/^  \(-.\), \[\(-[^=]*\)=.*/\1 \2/') )
-				if [[ $_opts != "" ]]; then
-					_values 'options' $_opts && ret=0
-				fi
+			help)
+				ret=0
 				;;
+			version)
+				ret=0
+				;;
+			# *)
+			# 	_opts=(  $(se help $line[1] | sed -e '/^  \[-/!d; s/^  \[\(-[^=]*\)=.*/\1/') )
+			# 	_opts+=( $(se help $line[1] | sed -e '/^  -/!d; s/^  \(-.\), \[\(-[^=]*\)=.*/\1 \2/') )
+			# 	if [[ $_opts != "" ]]; then
+			# 		_values 'options' $_opts && ret=0
+			# 	fi
+			# 	;;
 		esac
 		;;
 esac

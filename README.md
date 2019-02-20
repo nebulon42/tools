@@ -21,6 +21,9 @@ sudo fc-cache -fv
 
 # Install the toolset
 pip3 install standardebooks
+
+# Optional: ZSH users can install tab completion
+sudo ln -s
 ```
 
 ## macOS users
