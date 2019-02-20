@@ -99,10 +99,6 @@ class FirefoxRunningException(SeException):
 class RemoteCommandErrorException(SeException):
 	code = 10
 
-# def se():
-# 	print('SE Number of arguments:', len(sys.argv), 'arguments.')
-# 	print('Argument List:', str(sys.argv))
-
 def natural_sort(list_to_sort: list) -> list:
 	"""
 	Natural sort a list.

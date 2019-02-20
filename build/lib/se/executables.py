@@ -2,11 +2,34 @@
 
 import sys
 import argparse
+import types
 import se
 import se.typography
 
+COMMANDS = []
 
 def main() -> int:
+	for item, value in globals().items():
+		if isinstance(value, types.FunctionType) and item != "main":
+			COMMANDS.append(item)
+
+	parser = argparse.ArgumentParser(description="The entry point for the Standard Ebooks toolset.")
+	parser.add_argument("command", metavar="COMMAND", choices=COMMANDS, help="\n".join(COMMANDS))
+	parser.add_argument("arguments", metavar="ARGS", nargs="*", help="arguments for the subcommand")
+	args = parser.parse_args(sys.argv[1:2])
+
+	# Remove the command name from the list of passed args
+	sys.argv.pop(1)
+
+	print(globals())
+
+	# Change the command name so that argparse instances in child functions report the correct command on help/error
+	sys.argv[0] = args.command
+
+	# Now execute the command
+	return globals()[args.command]()
+
+def british2american() -> int:
 	parser = argparse.ArgumentParser(description="Try to convert British quote style to American quote style. Quotes must already be typogrified using the `typogrify` tool. This script isn’t perfect; proofreading is required, especially near closing quotes near to em-dashes.")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 	parser.add_argument("-f", "--force", action="store_true", help="force conversion of quote style")
@@ -41,7 +64,3 @@ def main() -> int:
 			print(" OK")
 
 	return 0
-
-
-if __name__ == "__main__":
-	sys.exit(main())
