@@ -62,8 +62,7 @@ setup(
         "terminaltables==3.1.0"
     ],
     package_data={
-        "se": ["data/*", "data/templates/*", "data/templates/META-INF/*"],
-        "": ["shell-completions/*"],
+        "se": ["data/*", "data/templates/*", "data/templates/META-INF/*", "completions/*/*"]
     },
     entry_points={
         "console_scripts": [

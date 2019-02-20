@@ -25,7 +25,8 @@ sudo fc-cache -fv
 pip3 install standardebooks
 
 # Optional: ZSH users can install tab completion
-sudo ln -s
+sudo ln -s $HOME/.local/lib/python3.6/site-packages/se/completions/zsh/_se /usr/share/zsh/vendor-completions/_se
+hash -rf
 ```
 
 ## macOS users
