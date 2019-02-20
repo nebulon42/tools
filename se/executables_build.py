@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
+"""
+This module contains the build function.
+
+It *could* be inlined in executables.py, but it's broken out into its own file for readability
+and maintainability.
+"""
 
 import sys
-import argparse
 import os
 import errno
 import shutil

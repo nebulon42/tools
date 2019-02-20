@@ -107,7 +107,7 @@ def build() -> int:
 	"""
 
 	# Use an alias because se.build.build() is the same name as this.build()
-	from se.build import build as se_build
+	from se.executables_build import build as se_build
 
 	parser = argparse.ArgumentParser(description="Build compatible .epub and pure .epub3 ebooks from a Standard Ebook source directory.  Output is placed in the current directory, or the target directory with --output-dir.")
 	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
@@ -290,7 +290,7 @@ def create_draft() -> int:
 	"""
 
 	# Use an alias because se.create_draft.create_draft() is the same name as this.create_draft()
-	from se.create_draft import create_draft as se_create_draft
+	from se.executables_create_draft import create_draft as se_create_draft
 
 	parser = argparse.ArgumentParser(description="Create a skeleton of a new Standard Ebook in the current directory.")
 	parser.add_argument("-a", "--author", dest="author", required=True, help="the author of the ebook")

@@ -33,9 +33,9 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 
 1. Install the [Homebrew package manager](https://brew.sh). Or, if you already have it installed, make sure it’s up to date:
 
-    ```shell
-    brew update
-    ```
+	```shell
+	brew update
+	```
 
 2. Install dependencies:
 
@@ -57,14 +57,6 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 	# Install python dependencies
 	pip3 install -r ./tools/requirements.txt
 	```
-
-# TODO
-
-Help and pull requests are welcomed!
-
-- Move some legacy scripts like `hyphenate` into appropriate libraries/scripts.
-
-- Some tool functionality should be moved into the SeEpub class. Suggestions on how to better organize SE code into packages/classes are welcome.
 
 # Tool descriptions
 

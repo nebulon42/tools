@@ -1,1 +1,4 @@
 __pycache__
+./build
+./dist
+./se.egg-info
