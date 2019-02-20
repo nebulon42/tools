@@ -1,0 +1,93 @@
+#compdef se
+
+local curcontext="$curcontext" state line _gems _opts ret=1
+
+_arguments -C -A "-v" -A "--version" \
+	'(- 1 *)'{-v,--version}'[display version information]' \
+	'1: :->cmds' \
+	'*:: :->args' && ret=0
+
+case $state in
+	cmds)
+		_values "se command" \
+			"british2american[Try to convert British quote style to American quote style]" \
+			"build[Build an ebook from a Standard Ebook source directory]" \
+			"build-images[Build ebook cover and titlepage images in a Standard Ebook source directory]" \
+			"clean[Prettify and canonicalize individual XHTML or SVG files]" \
+			"compare-versions[Render and compare XHTML files in an ebook repository]" \
+			"create-draft[Create a skeleton of a new Standard Ebook]" \
+			"dec2roman[Convert a decimal number to a Roman numeral]" \
+			"extract-ebook[Extract an EPUB, MOBI, or AZW3 ebook]" \
+			"find-mismatched-diacritics[Find words with mismatched diacritics in Standard Ebook source directories]" \
+			"help[List available SE commands]" \
+			"hyphenate[Insert soft hyphens at syllable breaks in an XHTML file]" \
+			"interactive-sr[Use Vim to perform an interactive search and replace on a list of files]" \
+			"lint[Check for various Standard Ebooks style errors]" \
+			"make-url-safe[Make a string URL-safe]" \
+			"modernize-spelling[Modernize spelling of some archaic words, and replace words that may be archaically compounded with a dash to a more modern spelling]" \
+			"prepare-release[Calculate work word count, insert release date if not yet set, and update modified date and revision number]" \
+			"print-manifest-and-spine[Print <manifest> and <spine> tags to standard output for the given Standard Ebooks source directory]" \
+			"reading-ease[Calculate the Flesch reading ease for a Standard Ebooks source directory]" \
+			"recompose-epub[Recompose a Standard Ebooks source directory into a single HTML5 file, and print to standard output]" \
+			"reorder-endnotes[Increment the specified endnote and all following endnotes by 1]" \
+			"roman2dec[Convert a Roman numeral to a decimal number]" \
+			"semanticate[Apply some scriptable semantics rules from the Standard Ebooks semantics manual]" \
+			"split-file[Split an XHTML file into many files]" \
+			"titlecase[Convert a string to titlecase]" \
+			"typogrify[Apply some scriptable typography rules from the Standard Ebooks typography manual to a Standard Ebook source directory]" \
+			"unicode-names[Display Unicode code points, descriptions, and links to more details for each character in a string]" \
+			"word-count[Count the number of words in an HTML file and optionally categorize by length]"
+		ret=0
+		;;
+	args)
+		case $line[1] in
+			help)
+				_values 'commands' 'install' 'update' 'package' 'exec' 'config' 'check' 'list' 'show' 'console' 'open' 'viz' 'init' 'gem' 'help' 'platform' 'outdated' && ret=0
+				;;
+			install)
+				_policies=('HighSecurity' 'MediumSecurity' 'LowSecurity' 'AlmostNoSecurity' 'NoSecurity')
+				_arguments \
+					'(--no-color)--no-color[disable colorization in output]' \
+					'(--local)--local[do not attempt to connect to rubygems.org]' \
+					'(--quiet)--quiet[only output warnings and errors]' \
+					'(--gemfile)--gemfile=-[use the specified gemfile instead of Gemfile]:gemfile' \
+					'(--system)--system[install to the system location]' \
+					'(--deployment)--deployment[install using defaults tuned for deployment environments]' \
+					'(--frozen)--frozen[do not allow the Gemfile.lock to be updated after this install]' \
+					'(--path)--path=-[specify a different path than the system default]:path:_files' \
+					'(--binstubs)--binstubs=-[generate bin stubs for sed gems to ./bin]:directory:_files' \
+					'(--without)--without=-[exclude gems that are part of the specified named group]:groups' \
+					'(--with)--with=-[include gems that are part of the specified named group]:groups' \
+					'(--clean)--clean[remove any gems not present in the current Gemfile]' \
+					'(--full-index)--full-index[download and cache the index file of all gems]' \
+					'(--jobs)--jobs=-[install gems parallely]:number' \
+					'(--force)--force[force download every gem]' \
+					'(--no-cache)--no-cache[do not update the cache in vendor/cache with newly installed gems]' \
+					'(--no-prune)--no-prune[do not remove stale gem from cache after installation]' \
+					'(--retry)--retry=-[number of times to retry failed network or git requests]:number' \
+					'(--sheband)--shebang=-[specify ruby executable to execute scripts]:ruby' \
+					'(--standalone)--standalone=-[create standalone ses]:groups' \
+					"(--trust-policy)--trust-policy=-[apply the Rubygems security policy]:arg:($_policies)"
+				ret=0
+				;;
+			exec)
+				_normal && ret=0
+				;;
+			(open|show)
+				_gems=( $(se show 2> /dev/null | sed -e '/^  \*/!d; s/^  \* \([^ ]*\) .*/\1/') )
+				if [[ $_gems != "" ]]; then
+					_values 'gems' $_gems && ret=0
+				fi
+				;;
+			*)
+				_opts=(  $(se help $line[1] | sed -e '/^  \[-/!d; s/^  \[\(-[^=]*\)=.*/\1/') )
+				_opts+=( $(se help $line[1] | sed -e '/^  -/!d; s/^  \(-.\), \[\(-[^=]*\)=.*/\1 \2/') )
+				if [[ $_opts != "" ]]; then
+					_values 'options' $_opts && ret=0
+				fi
+				;;
+		esac
+		;;
+esac
+
+return ret

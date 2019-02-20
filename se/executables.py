@@ -25,6 +25,20 @@ import se.typography
 import se.spelling
 from se.se_epub import SeEpub
 
+def _get_commands() -> list:
+	"""
+	Helper function to generate a list of available commands from all of the functions in this file.
+	"""
+
+	commands = []
+	for item, value in globals().items():
+		if isinstance(value, types.FunctionType) and item != "main" and item != "se_help" and not item.startswith("_"):
+			commands.append(item.replace("_", "-"))
+
+	commands.append("help")
+	commands.sort()
+
+	return commands
 
 def main() -> int:
 	"""
@@ -35,14 +49,7 @@ def main() -> int:
 	Some more complex commands (like `create-draft` or `build` are broken out into their own files for
 	readability and maintainability.
 	"""
-
-	# Generate a list of available commands from all of the functions in this file.
-	commands = []
-	for item, value in globals().items():
-		if isinstance(value, types.FunctionType) and item != "main" and not item.startswith("_"):
-			commands.append(item.replace("_", "-"))
-
-	commands.sort()
+	commands = _get_commands()
 
 	parser = argparse.ArgumentParser(description="The entry point for the Standard Ebooks toolset.")
 	parser.add_argument("command", metavar="COMMAND", choices=commands, help="one of: " + " ".join(commands))
@@ -54,6 +61,9 @@ def main() -> int:
 
 	# Change the command name so that argparse instances in child functions report the correct command on help/error.
 	sys.argv[0] = args.command
+
+	if args.command == "help":
+		args.command = "se_help"
 
 	# Now execute the command
 	return globals()[args.command.replace("-", "_")]()
@@ -439,6 +449,22 @@ def find_mismatched_diacritics() -> int:
 	if mismatches:
 		for accented_word, plain_word in sorted(mismatches.items()):
 			print("{}, {}".format(accented_word, plain_word))
+
+	return 0
+
+def se_help() -> int:
+	"""
+	Entry point for `se help`
+
+	help() is a built-in function so this function is called se_help().
+	"""
+
+	commands = _get_commands()
+
+	print("The following commands are available:")
+
+	for command in commands:
+		print(command)
 
 	return 0
 

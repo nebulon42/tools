@@ -100,7 +100,7 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 
 -	### `interactive-sr`
 
-	A macro for calling Vim to interactively search and replace a regex on a list of files.
+	Use Vim to perform an interactive search and replace on a list of files. Use y/n/a to confirm (y) or reject (n) a replacement, or to replace (a)ll.
 
 -	### `lint`
 
@@ -120,7 +120,7 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 
 -	### `print-manifest-and-spine`
 
-	Create a ```<manifest>``` and ```<spine>``` tag for content.opf based on the passed Standard Ebooks source directory and print to standard output.
+	Print ```<manifest>``` and ```<spine>``` tags to standard output for the given Standard Ebooks source directory, for use in that directory’s content.opf..
 
 -	### `reading-ease`
 
