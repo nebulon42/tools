@@ -63,6 +63,7 @@ setup(
     ],
     package_data={
         "se": ["data/*", "data/templates/*", "data/templates/META-INF/*"],
+        "": ["shell-completions/*"],
     },
     entry_points={
         "console_scripts": [

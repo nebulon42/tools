@@ -2,6 +2,8 @@
 
 A collection of tools Standard Ebooks uses to produce its ebooks, including basic setup of ebooks, text processing, and build tools.
 
+Installing this toolset using `pip` makes the `se` command line executable available. Its various commands are described below.
+
 # Installation
 
 ## Ubuntu 18.04 (Bionic) users
@@ -97,6 +99,10 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 
 	Find words with mismatched diacritics in Standard Ebook source directories.  For example, ```cafe``` in one file and ```café``` in another.
 
+-	### `help`
+
+	List available SE commands.
+
 -	### `hyphenate`
 
 	Insert soft hyphens at syllable breaks in an XHTML file.
@@ -160,6 +166,10 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 -	### `unicode-names`
 
 	Display Unicode code points, descriptions, and links to more details for each character in a string.  Useful for differentiating between different flavors of spaces, dashes, and invisible characters like word joiners.
+
+-	### `version`
+
+	Print the version number and exit.
 
 -	### `word-count`
 

@@ -66,6 +66,13 @@ case $state in
 					'*: :_directories'
 				ret=0
 				;;
+			clean)
+				_arguments \
+					'(-s --single-lines)'{-s,--single-lines}'[remove hard line wrapping]' \
+					'(-v --verbose)'{-v,--verbose}'[increase output verbosity]' \
+					'*: :_files -g \*.\(svg\|xhtml\)'
+				ret=0
+				;;
 			help)
 				ret=0
 				;;
