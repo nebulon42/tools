@@ -8,8 +8,7 @@ A collection of tools Standard Ebooks uses to produce its ebooks, including basi
 
 ```shell
 # Install some pre-flight dependencies
-# lxml requires the following packages for its pip build process: python3-dev libxml2-dev libxslt1-dev zlib1g-dev
-sudo apt install -y python3-pip python3-dev libxml2-dev libxslt1-dev zlib1g-dev libxml2-utils librsvg2-bin libssl-dev libimage-exiftool-perl imagemagick epubcheck default-jre inkscape calibre curl git
+sudo apt install -y python3-pip libxml2-utils librsvg2-bin libssl-dev libimage-exiftool-perl imagemagick epubcheck default-jre inkscape calibre curl git
 
 # Install required fonts
 mkdir -p ~/.local/share/fonts/
@@ -21,7 +20,7 @@ curl -s -o ~/.local/share/fonts/OFLGoudyStM-Italic.otf "https://raw.githubuserco
 sudo fc-cache -fv
 
 # Install the toolset
-pip3 install se
+pip3 install standardebooks
 ```
 
 ## macOS users
@@ -50,7 +49,7 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 	curl -s -o ~/Library/Fonts/OFLGoudyStM-Italic.otf "https://raw.githubusercontent.com/theleagueof/sorts-mill-goudy/master/OFLGoudyStM-Italic.otf"
 
 	# Install the toolset
-	pip3 install se
+	pip3 install standardebooks
 	```
 
 # Tool descriptions

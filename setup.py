@@ -6,6 +6,9 @@ To build the project, from the project's root directory do:
 
 python3 setup.py bdist_wheel
 pip3 install dist/se-*.whl
+
+To upload to pypi:
+pip3 install twine
 """
 
 from os import path
@@ -22,7 +25,7 @@ def get_file_contents(filename):
         return file.read()
 
 setup(
-    name="se",
+    name="standardebooks",
     version="1.0.0",
     description="The toolset used to produce Standard Ebooks epub ebooks.",
     long_description=get_file_contents(path.join(path.abspath(path.dirname(__file__)), "README.md")),
