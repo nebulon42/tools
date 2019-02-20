@@ -180,7 +180,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'se=se:se',
+            'british2american = se.executables:main',
         ],
     },
 

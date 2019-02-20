@@ -2,8 +2,7 @@
 
 import sys
 import argparse
-
-sys.path.append(".")
+from .. import se
 import se
 import se.typography
 
