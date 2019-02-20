@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+"""
+This module contains the create_draft function and various helper functions.
 
-import sys
+It *could* be inlined in executables.py, but it's broken out into its own file for readability
+and maintainability.
+"""
+
 import argparse
 import os
 import shutil
@@ -315,6 +320,10 @@ def _get_wikipedia_url(string: str, get_nacoaf_url: bool) -> (str, str):
 	return None, None
 
 def create_draft(args: list) -> int:
+	"""
+	Entry point for `se create-draft`
+	"""
+
 	parser = argparse.ArgumentParser(description="Create a skeleton of a new Standard Ebook in the current directory.")
 	parser.add_argument("-a", "--author", dest="author", required=True, help="the author of the ebook")
 	parser.add_argument("-t", "--title", dest="title", required=True, help="the title of the ebook")

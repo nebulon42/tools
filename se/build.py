@@ -33,17 +33,10 @@ COVER_THUMBNAIL_HEIGHT = COVER_SVG_HEIGHT / 4
 SVG_OUTER_STROKE_WIDTH = 2
 SVG_TITLEPAGE_OUTER_STROKE_WIDTH = 4
 
-def main() -> int:
-	parser = argparse.ArgumentParser(description="Build compatible .epub and pure .epub3 ebooks from a Standard Ebook source directory.  Output is placed in the current directory, or the target directory with --output-dir.")
-	parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
-	parser.add_argument("-o", "--output-dir", dest="output_directory", metavar="DIRECTORY", type=str, help="a directory to place output files in; will be created if it doesn’t exist")
-	parser.add_argument("-c", "--check", action="store_true", help="use epubcheck to validate the compatible .epub file; if --kindle is also specified and epubcheck fails, don’t create a Kindle file")
-	parser.add_argument("-k", "--kindle", dest="build_kindle", action="store_true", help="also build an .azw3 file for Kindle")
-	parser.add_argument("-b", "--kobo", dest="build_kobo", action="store_true", help="also build a .kepub.epub file for Kobo")
-	parser.add_argument("-t", "--covers", dest="build_covers", action="store_true", help="output the cover and a cover thumbnail")
-	parser.add_argument("-p", "--proof", action="store_true", help="insert additional CSS rules that are helpful for proofreading; output filenames will end in .proof")
-	parser.add_argument("source_directory", metavar="DIRECTORY", help="a Standard Ebooks source directory")
-	args = parser.parse_args()
+def build(args: list) -> int:
+	"""
+	Entry point for `se build`
+	"""
 
 	calibre_app_mac_path = "/Applications/calibre.app/Contents/MacOS/"
 	epubcheck_path = shutil.which("epubcheck")
@@ -925,7 +918,3 @@ def main() -> int:
 				print(" OK")
 
 	return 0
-
-
-if __name__ == "__main__":
-	sys.exit(main())

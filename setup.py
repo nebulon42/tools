@@ -161,7 +161,7 @@ setup(
     # If using Python 2.6 or earlier, then these have to be included in
     # MANIFEST.in as well.
     package_data={  # Optional
-        'se': ['data/*', 'data/templates/*', 'executables/*'],
+        'se': ['data/*', 'data/templates/*', 'data/templates/META-INF/*'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may

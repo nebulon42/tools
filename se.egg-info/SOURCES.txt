@@ -1,6 +1,8 @@
 README.md
 setup.py
 se/__init__.py
+se/build.py
+se/create_draft.py
 se/easy_xml.py
 se/epub.py
 se/executables.py
@@ -40,19 +42,7 @@ se/data/templates/titlepage.svg
 se/data/templates/titlepage.xhtml
 se/data/templates/toc.xhtml
 se/data/templates/uncopyright.xhtml
-se/executables/british2american
-se/executables/build
-se/executables/build-images
-se/executables/clean
-se/executables/compare-versions
-se/executables/create-draft
-se/executables/dec2roman
-se/executables/extract-ebook
-se/executables/find-mismatched-diacritics
-se/executables/hyphenate
-se/executables/interactive-sr
-se/executables/lint
-se/executables/make-url-safe
+se/data/templates/META-INF/container.xml
 se/executables/modernize-spelling
 se/executables/prepare-release
 se/executables/print-manifest-and-spine
@@ -62,7 +52,6 @@ se/executables/reorder-endnotes
 se/executables/roman2dec
 se/executables/semanticate
 se/executables/split-file
-se/executables/titlecase
 se/executables/typogrify
 se/executables/unicode-names
 se/executables/word-count
