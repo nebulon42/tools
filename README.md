@@ -60,119 +60,119 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 
 # Tool descriptions
 
--	### `british2american`
+-	### `se british2american`
 
 	Try to convert British quote style to American quote style in DIRECTORY/src/epub/text/.
 
-	Quotes must already be typogrified using the ```typogrify``` tool.
+	Quotes must already be typogrified using the `se typogrify` tool.
 
 	This script isn’t perfect; proofreading is required, especially near closing quotes near to em-dashes.
 
--	### `build`
+-	### `se build`
 
 	Build an ebook from a Standard Ebook source directory.
 
--	### `build-images`
+-	### `se build-images`
 
 	Build ebook cover and titlepage images in a Standard Ebook source directory and place the output in DIRECTORY/src/epub/images/.
 
--	### `clean`
+-	### `se clean`
 
 	Prettify and canonicalize individual XHTML or SVG files, or all XHTML and SVG files in a source directory.  Note that this only prettifies the source code; it doesn’t perform typography changes.
 
--	### `compare-versions`
+-	### `se compare-versions`
 
 	Use Firefox to render and compare XHTML files in an ebook repository. Run on a dirty repository to visually compare the repository’s dirty state with its clean state.
 
--	### `create-draft`
+-	### `se create-draft`
 
 	Create a skeleton of a new Standard Ebook.
 
--	### `dec2roman`
+-	### `se dec2roman`
 
 	Convert a decimal number to a Roman numeral.
 
--	### `extract-ebook`
+-	### `se extract-ebook`
 
 	Extract an EPUB, MOBI, or AZW3 ebook into ./FILENAME.extracted/ or a target directory.
 
--	### `find-mismatched-diacritics`
+-	### `se find-mismatched-diacritics`
 
-	Find words with mismatched diacritics in Standard Ebook source directories.  For example, ```cafe``` in one file and ```café``` in another.
+	Find words with mismatched diacritics in Standard Ebook source directories.  For example, `cafe` in one file and `café` in another.
 
--	### `help`
+-	### `se help`
 
 	List available SE commands.
 
--	### `hyphenate`
+-	### `se hyphenate`
 
 	Insert soft hyphens at syllable breaks in an XHTML file.
 
--	### `interactive-sr`
+-	### `se interactive-sr`
 
 	Use Vim to perform an interactive search and replace on a list of files. Use y/n/a to confirm (y) or reject (n) a replacement, or to replace (a)ll.
 
--	### `lint`
+-	### `se lint`
 
 	Check for various Standard Ebooks style errors.
 
--	### `make-url-safe`
+-	### `se make-url-safe`
 
 	Make a string URL-safe.
 
--	### `modernize-spelling`
+-	### `se modernize-spelling`
 
-	Modernize spelling of some archaic words, and replace words that may be archaically compounded with a dash to a more modern spelling.  For example, replace ```ash-tray``` with ```ashtray```.
+	Modernize spelling of some archaic words, and replace words that may be archaically compounded with a dash to a more modern spelling.  For example, replace `ash-tray` with `ashtray`.
 
--	### `prepare-release`
+-	### `se prepare-release`
 
 	Calculate work word count, insert release date if not yet set, and update modified date and revision number.
 
--	### `print-manifest-and-spine`
+-	### `se print-manifest-and-spine`
 
-	Print ```<manifest>``` and ```<spine>``` tags to standard output for the given Standard Ebooks source directory, for use in that directory’s content.opf..
+	Print `<manifest>` and `<spine>` tags to standard output for the given Standard Ebooks source directory, for use in that directory’s content.opf..
 
--	### `reading-ease`
+-	### `se reading-ease`
 
 	Calculate the Flesch reading ease for a Standard Ebooks source directory.
 
--	### `recompose-epub`
+-	### `se recompose-epub`
 
 	Recompose a Standard Ebooks source directory into a single HTML5 file, and print to standard output.
 
--	### `reorder-endnotes`
+-	### `se reorder-endnotes`
 
 	Increment the specified endnote and all following endnotes by 1.
 
--	### `roman2dec`
+-	### `se roman2dec`
 
 	Convert a Roman numeral to a decimal number.
 
--	### `semanticate`
+-	### `se semanticate`
 
 	Apply some scriptable semantics rules from the Standard Ebooks semantics manual to a Standard Ebook source directory.
 
--	### `split-file`
+-	### `se split-file`
 
 	Split an XHTML file into many files at all instances of `<!--se:split-->`, and include a header template for each file.
 
--	### `titlecase`
+-	### `se titlecase`
 
 	Convert a string to titlecase.
 
--	### `typogrify`
+-	### `se typogrify`
 
 	Apply some scriptable typography rules from the Standard Ebooks typography manual to a Standard Ebook source directory.
 
--	### `unicode-names`
+-	### `se unicode-names`
 
 	Display Unicode code points, descriptions, and links to more details for each character in a string.  Useful for differentiating between different flavors of spaces, dashes, and invisible characters like word joiners.
 
--	### `version`
+-	### `se version`
 
 	Print the version number and exit.
 
--	### `word-count`
+-	### `se word-count`
 
 	Count the number of words in an HTML file and optionally categorize by length.
 
