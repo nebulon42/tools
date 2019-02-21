@@ -10,7 +10,7 @@ Installing this toolset using `pip` makes the `se` command line executable avail
 
 ```shell
 # Install some pre-flight dependencies
-sudo apt install -y python3-pip libxml2-utils librsvg2-bin libssl-dev libimage-exiftool-perl imagemagick epubcheck default-jre inkscape calibre curl git
+sudo apt install -y python3-pip libxml2-utils librsvg2-bin libimage-exiftool-perl imagemagick epubcheck default-jre inkscape calibre curl git
 
 # Install required fonts
 mkdir -p ~/.local/share/fonts/
@@ -24,8 +24,8 @@ sudo fc-cache -fv
 # Install the toolset
 pip3 install standardebooks
 
-# May not be necessary: Add pip's binary location (~/.local/bin) to your $PATH to be able to access the `se` command
-# You may also have to add ~/.local/bin to your $PATH in .bashrc or .zshrc
+# Add pip's binary location (~/.local/bin) to your $PATH to be able to access the `se` command
+# Add ~/.local/bin to your $PATH in .bashrc or .zshrc to make it permanent
 export PATH=$PATH:~/.local/bin
 
 # Optional: ZSH users can install tab completion

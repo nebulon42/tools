@@ -51,7 +51,7 @@ def main() -> int:
 	"""
 
 	# If we're asked for the version, short circuit and exit
-	if sys.argv[1] == "-v" or sys.argv[1] == "--version":
+	if len(sys.argv) == 2 and (sys.argv[1] == "-v" or sys.argv[1] == "--version"):
 		return version()
 
 	commands = _get_commands()
