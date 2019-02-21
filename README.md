@@ -24,9 +24,12 @@ sudo fc-cache -fv
 # Install the toolset
 pip3 install standardebooks
 
+# May not be necessary: Add pip's binary location (~/.local/bin) to your $PATH to be able to access the `se` command
+# You may also have to add ~/.local/bin to your $PATH in .bashrc or .zshrc
+export PATH=$PATH:~/.local/bin
+
 # Optional: ZSH users can install tab completion
-sudo ln -s $HOME/.local/lib/python3.6/site-packages/se/completions/zsh/_se /usr/share/zsh/vendor-completions/_se
-hash -rf
+sudo ln -s $HOME/.local/lib/python3.6/site-packages/se/completions/zsh/_se /usr/share/zsh/vendor-completions/_se && hash -rf
 ```
 
 ## macOS users
