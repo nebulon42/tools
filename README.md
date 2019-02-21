@@ -63,7 +63,9 @@ These instructions were tested on macOS 10.12 and 10.13. Your mileage may vary. 
 
 # Help wanted
 
-We need help creating bash completions for these tools. If you’re familiar with bash, please contact contact us to help!
+- Help is wanted for creating bash completions for these tools. If you’re familiar with bash, please contact contact us to help!
+
+- We’d also like some help with possibly adding virtualenv to the installation instructions. If you’re a Python expert and have a suggestion about using virtualenv, please get in touch.
 
 # Tool descriptions
 
